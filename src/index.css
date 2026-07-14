@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --kids-pink: #ff6b9d;
+  --kids-purple: #a855f7;
+  --kids-blue: #3b82f6;
+  --kids-green: #22c55e;
+  --kids-yellow: #fbbf24;
+  --kids-orange: #f97316;
+  --kids-red: #ef4444;
+  --kids-cyan: #06b6d4;
+  --kids-lime: #84cc16;
+}
+
+* {
+  font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.kid-button {
+  @apply px-8 py-4 rounded-3xl text-white font-bold text-xl shadow-lg transform transition-all duration-200;
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  border: 4px solid #d97706;
+}
+
+.kid-button:hover {
+  @apply scale-105;
+  box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+}
+
+.kid-button:active {
+  @apply scale-95;
+}
+
+.kid-card {
+  @apply rounded-3xl p-6 shadow-xl;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+  border: 4px solid #e5e7eb;
+}
+
+.kid-input {
+  @apply px-6 py-4 rounded-2xl text-xl border-4 border-gray-300 focus:border-kids-blue focus:outline-none;
+  font-family: 'Comic Neue', cursive;
+}
+
+.star {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #fbbf24;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.balloon {
+  position: absolute;
+  width: 40px;
+  height: 50px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+}
+
+.game-bg {
+  background: linear-gradient(180deg, #87CEEB 0%, #98FB98 50%, #FFE4B5 100%);
+}
+
+.rainbow-bg {
+  background: linear-gradient(
+    90deg,
+    #ff6b6b,
+    #ffa500,
+    #ffff00,
+    #008000,
+    #0000ff,
+    #4b0082,
+    #ee82ee
+  );
+}
+
+.card-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f5 50%, #ffffff 100%);
+}
+
+.category-card {
+  @apply rounded-3xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer transform transition-all duration-300;
+  min-width: 120px;
+  min-height: 120px;
+}
+
+.category-card:hover {
+  @apply scale-105 shadow-2xl;
+}
+
+.letter-display {
+  @apply flex items-center justify-center rounded-3xl;
+  font-size: 8rem;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.number-display {
+  @apply flex items-center justify-center rounded-3xl;
+  font-size: 6rem;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+  @apply h-6 rounded-full overflow-hidden;
+  background: #e5e7eb;
+}
+
+.progress-fill {
+  @apply h-full rounded-full transition-all duration-500;
+  background: linear-gradient(90deg, #22c55e, #84cc16);
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.bounce-in {
+  animation: bounce-in 0.5s ease-out;
+}
+
+@keyframes flyStar {
+  0% { transform: translate(0, 0) scale(0.3) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; transform: translate(calc(var(--dx, 0px)), -20px) scale(1) rotate(90deg); }
+  100% {
+    transform: translate(calc((Math.random() - 0.5) * 300px), -260px) scale(0.4) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flyStarFixed {
+  0% { transform: translate(-50%, -50%) scale(0.3) rotate(0deg); opacity: 0; }
+  15% { opacity: 1; transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% - 20px)) scale(1) rotate(45deg); }
+  100% { transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% - 260px)) scale(0.3) rotate(540deg); opacity: 0; }
+}
+
+.gpu-accelerated {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  animation: confetti 3s ease-out forwards;
+}
+
+.draggable {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.drop-zone {
+  @apply border-4 border-dashed rounded-2xl transition-all duration-200;
+}
+
+.drop-zone.active {
+  @apply border-solid bg-yellow-100;
+}
+
+.drop-zone.correct {
+  @apply border-green-500 bg-green-100;
+}
+
+.drop-zone.incorrect {
+  @apply border-red-500 bg-red-100;
+  animation: shake 0.5s ease-in-out;
+}
+
+.character {
+  transition: transform 0.3s ease;
+}
+
+.character:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+@media (max-width: 640px) {
+  .letter-display {
+    font-size: 5rem;
+  }
+  .number-display {
+    font-size: 4rem;
+  }
+  .category-card {
+    min-width: 90px;
+    min-height: 90px;
+  }
+}

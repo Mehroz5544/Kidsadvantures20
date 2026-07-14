@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Drag and Drop Activity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ffead9",
+                        "surface-container-high": "#ffe3ca",
+                        "inverse-primary": "#ffba20",
+                        "primary-fixed-dim": "#ffba20",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#514532",
+                        "on-tertiary-fixed": "#002106",
+                        "surface-container-low": "#fff1e7",
+                        "on-primary-fixed": "#271900",
+                        "on-background": "#2b1701",
+                        "on-secondary-fixed-variant": "#004d67",
+                        "outline": "#837560",
+                        "inverse-on-surface": "#ffeee0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f4",
+                        "error": "#ba1a1a",
+                        "tertiary": "#006e24",
+                        "surface": "#fff8f4",
+                        "on-tertiary-container": "#005f1e",
+                        "surface-variant": "#ffdcbc",
+                        "on-error": "#ffffff",
+                        "primary": "#7c5800",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "on-primary-container": "#6b4c00",
+                        "inverse-surface": "#432b11",
+                        "on-tertiary-fixed-variant": "#005319",
+                        "surface-tint": "#7c5800",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#004b65",
+                        "outline-variant": "#d5c4ab",
+                        "tertiary-fixed-dim": "#55e16b",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f4",
+                        "tertiary-fixed": "#73fe84",
+                        "surface-container-highest": "#ffdcbc",
+                        "tertiary-container": "#53df69",
+                        "on-surface": "#2b1701",
+                        "secondary": "#006688",
+                        "primary-container": "#ffb800",
+                        "surface-dim": "#fbd3ac",
+                        "secondary-fixed": "#c2e8ff",
+                        "secondary-fixed-dim": "#75d1ff",
+                        "secondary-container": "#00c1fd",
+                        "primary-fixed": "#ffdea8",
+                        "on-secondary-fixed": "#001e2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "64px",
+                        "gutter": "24px",
+                        "stack-gap": "16px",
+                        "margin-desktop": "60px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Quicksand"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-caps": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-btm": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "label-caps": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-btm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .bubbly-shadow { box-shadow: 0 4px 0 0 rgba(124, 88, 0, 0.2); }
+        .bubbly-active:active { transform: translateY(4px); box-shadow: none; }
+        
+        .pulse-outline {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.05); }
+        }
+        
+        .float-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-anim-delay {
+            animation: float 3s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-btm min-h-screen flex flex-col overflow-hidden select-none">
+<!-- Top Navigation (Mobile Navigation suppressed due to task focus) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile py-4 bg-surface-container border-b-4 border-surface-variant shadow-[0_4px_0_0_rgba(124,88,0,0.2)]">
+<button aria-label="Go Back" class="w-[64px] h-[64px] flex items-center justify-center bg-surface-container-high rounded-full bubbly-shadow bubbly-active text-primary hover:translate-y-0.5 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 32px;">arrow_back</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-primary">Magic Map</h1>
+<div class="flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-caps text-label-caps bubbly-shadow">
+<span>125</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; color: #ffba20;">star</span>
+</div>
+</header>
+<!-- Main Activity Canvas -->
+<main class="flex-grow pt-24 pb-4 px-margin-mobile flex flex-col items-center justify-center relative overflow-hidden" data-alt="A bright, sunny, cartoon-style meadow with rolling green hills, a clear blue sky with fluffy white clouds, and a friendly, 3D bubbly panda character sitting on the right side watching playfully. The scene uses soft, safe, vibrant colors with a primary palette of greens, blues, and warm sunlight, designed to inspire joy in children." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZspY5Y2Vsv6puey4kN44m9f-cFtClpBSg5OPSZ2VNo9qaqc6m5-c9MZSPXVh2QP7fst8Vc4pjvFDKNQQF1m_MD8ON56em7DJj3cX9HD6ZQA3E3WgvxmFwcn4YhWwgcqMGoNbl_VyeYYtplKcniusO9vqfre2tyym0Cw02dF2PqUgF6H6c_gDKG0f6M6kGu_tEo17OuHPPhLXSYsk20VkZjbRTsCM7vpE99CG7GIvksQ2KVGylMBlq'); background-size: cover; background-position: center;">
+<!-- Hint Animation -->
+<div class="absolute top-32 text-center z-20">
+<div class="bg-surface text-primary font-headline-lg-mobile text-headline-lg-mobile px-6 py-3 rounded-full bubbly-shadow pulse-outline">
+                Drop it here! <span class="material-symbols-outlined align-middle">arrow_downward</span>
+</div>
+</div>
+<!-- Drop Zone (Outline of Number 1) -->
+<div class="relative z-10 w-48 h-64 mt-16 flex items-center justify-center border-8 border-dashed border-outline-variant rounded-xl bg-surface-container-low/50 backdrop-blur-sm pulse-outline" id="dropzone">
+<span class="text-[120px] font-display-hero text-outline-variant opacity-30 select-none">1</span>
+</div>
+<!-- Draggable Numbers Container -->
+<div class="absolute bottom-12 w-full flex justify-center gap-gutter px-gutter z-30">
+<!-- Draggable Number 1 -->
+<div class="w-32 h-32 bg-secondary text-on-secondary rounded-xl flex items-center justify-center shadow-[0_8px_0_0_#004b65] active:shadow-none active:translate-y-2 transition-all cursor-grab float-anim" draggable="true" id="draggable-1">
+<span class="text-[80px] font-display-hero leading-none">1</span>
+</div>
+<!-- Draggable Number 2 -->
+<div class="w-32 h-32 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center shadow-[0_8px_0_0_#7c5800] active:shadow-none active:translate-y-2 transition-all cursor-grab float-anim-delay" draggable="true" id="draggable-2">
+<span class="text-[80px] font-display-hero leading-none">2</span>
+</div>
+</div>
+</main>
+<script>
+        // Simple Drag and Drop Logic for demonstration
+        const draggables = document.querySelectorAll('[draggable="true"]');
+        const dropzone = document.getElementById('dropzone');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('opacity-50');
+                draggable.classList.remove('float-anim', 'float-anim-delay');
+            });
+
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('opacity-50');
+            });
+        });
+
+        dropzone.addEventListener('dragover', e => {
+            e.preventDefault(); // Necessary to allow dropping
+            dropzone.classList.replace('border-outline-variant', 'border-primary');
+            dropzone.classList.replace('bg-surface-container-low/50', 'bg-surface-variant/80');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.replace('border-primary', 'border-outline-variant');
+            dropzone.classList.replace('bg-surface-variant/80', 'bg-surface-container-low/50');
+        });
+
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            // Basic simulation of success
+            dropzone.innerHTML = '<span class="text-[120px] font-display-hero text-primary select-none">1</span>';
+            dropzone.classList.remove('border-dashed', 'pulse-outline');
+            dropzone.classList.add('border-solid', 'border-primary', 'bg-surface-container-high', 'scale-110', 'transition-transform');
+            
+            const num1 = document.getElementById('draggable-1');
+            if(num1) num1.style.display = 'none';
+
+            // Trigger basic confetti effect (simulated with alert or console for this environment)
+            console.log("Success! Confetti triggered.");
+            // In a real implementation, a JS confetti library would be called here.
+        });
+    </script>
+</body></html>

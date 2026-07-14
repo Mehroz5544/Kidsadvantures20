@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>You Won! - Lumina Learning</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#ffeee0",
+                        "on-tertiary-fixed-variant": "#005319",
+                        "on-tertiary-container": "#005f1e",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#514532",
+                        "on-secondary-fixed": "#001e2b",
+                        "surface-dim": "#fbd3ac",
+                        "outline-variant": "#d5c4ab",
+                        "on-background": "#2b1701",
+                        "primary": "#7c5800",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-container": "#ffead9",
+                        "secondary-container": "#00c1fd",
+                        "on-primary-container": "#6b4c00",
+                        "background": "#fff8f4",
+                        "inverse-primary": "#ffba20",
+                        "on-tertiary-fixed": "#002106",
+                        "surface": "#fff8f4",
+                        "on-error-container": "#93000a",
+                        "outline": "#837560",
+                        "surface-container-low": "#fff1e7",
+                        "surface-tint": "#7c5800",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "tertiary-fixed-dim": "#55e16b",
+                        "secondary-fixed": "#c2e8ff",
+                        "on-surface": "#2b1701",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffba20",
+                        "tertiary": "#006e24",
+                        "surface-container-highest": "#ffdcbc",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#271900",
+                        "primary-container": "#ffb800",
+                        "secondary": "#006688",
+                        "surface-container-high": "#ffe3ca",
+                        "tertiary-container": "#53df69",
+                        "surface-variant": "#ffdcbc",
+                        "on-secondary-fixed-variant": "#004d67",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#004b65",
+                        "surface-bright": "#fff8f4",
+                        "secondary-fixed-dim": "#75d1ff",
+                        "primary-fixed": "#ffdea8",
+                        "tertiary-fixed": "#73fe84",
+                        "inverse-surface": "#432b11"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "60px",
+                        "touch-target-min": "64px",
+                        "stack-gap": "16px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Quicksand", "sans-serif"],
+                        "body-btm": ["Quicksand", "sans-serif"],
+                        "headline-lg": ["Quicksand", "sans-serif"],
+                        "headline-lg-mobile": ["Quicksand", "sans-serif"],
+                        "display-hero": ["Quicksand", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-btm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* CSS Animations for celebration */
+        @keyframes bounce-in {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 184, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); }
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-bounce-in { animation: bounce-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+        .pop-on-hover:hover { animation: pop 0.3s ease-in-out; }
+        
+        /* 3D Button Effects */
+        .btn-3d {
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0;
+        }
+        .btn-3d:active {
+            top: 4px;
+            box-shadow: none !important;
+            transform: translateY(4px);
+        }
+        
+        /* Confetti effect using background */
+        .confetti-bg {
+            background-image: 
+                radial-gradient(circle at 20% 30%, #ffba20 4px, transparent 5px),
+                radial-gradient(circle at 80% 20%, #53df69 6px, transparent 7px),
+                radial-gradient(circle at 40% 70%, #00c1fd 5px, transparent 6px),
+                radial-gradient(circle at 70% 80%, #ffba20 5px, transparent 6px),
+                radial-gradient(circle at 10% 80%, #00c1fd 6px, transparent 7px),
+                radial-gradient(circle at 90% 50%, #53df69 4px, transparent 5px);
+            background-size: 200px 200px;
+            animation: bg-scroll 20s linear infinite;
+        }
+        @keyframes bg-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 200px; }
+        }
+
+        /* Hide scrollbar */
+        body { overflow: hidden; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container h-screen w-full flex flex-col justify-center items-center text-on-surface font-label-caps confetti-bg relative">
+<!-- Celebration Canvas -->
+<main class="w-full max-w-4xl px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center z-10 relative space-y-gutter">
+<!-- Header / Main Message -->
+<div class="text-center animate-bounce-in opacity-0" style="animation-delay: 0.2s;">
+<h1 class="text-display-hero font-display-hero text-primary drop-shadow-[0_4px_0_rgba(124,88,0,0.2)] mb-2">
+                Great Job!
+            </h1>
+<p class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface-variant">
+                Level Complete!
+            </p>
+</div>
+<!-- Trophy / Character Centerpiece -->
+<div class="relative w-full max-w-md aspect-square flex items-center justify-center animate-bounce-in opacity-0" style="animation-delay: 0.5s;">
+<!-- Glow Effect -->
+<div class="absolute inset-0 bg-primary-container rounded-full blur-3xl opacity-50 animate-pulse-glow"></div>
+<!-- Trophy & Character Container -->
+<div class="relative z-10 w-full h-full flex flex-col items-center justify-center animate-float">
+<img class="w-3/4 object-contain drop-shadow-xl" data-alt="A highly detailed 3D illustration of a large, shiny golden trophy surrounded by floating gold stars. In front of the trophy is a cute, happy rabbit character wearing small professor glasses, jumping for joy with paws in the air. The style is bright, bubbly, and tactile, designed for young children, set against a transparent or very soft pastel background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz32Vy4lwGO2JZNBAxj6UP0ZZq9QlLKgF7ufbRBcbGJj_BHs3IUUaDDxORC88oSkkUiRa9sK2EV1R0M_8_IkIbd3Huy-LZpZbcetM-qBBMD1dbCedleCoZyayA9SSBVNZh-6IXpX2APnk1Oynoj22Xx2qbh-3MS8I1nQy725F-5v9k_NqJWMnnmYa_Q_R-84-lPXTX1rDd9NgF2p4rT87YrZ6pa6M8TwpeabThqQ7zzyz48ZVHscgi"/>
+</div>
+<!-- Sparkles -->
+<span class="material-symbols-outlined absolute top-10 left-10 text-primary-container text-6xl animate-bounce" style="animation-delay: 0.1s; font-variation-settings: 'FILL' 1;">spark</span>
+<span class="material-symbols-outlined absolute bottom-20 right-10 text-secondary-container text-5xl animate-bounce" style="animation-delay: 0.4s; font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<!-- Rewards Display -->
+<div class="flex flex-row gap-stack-gap animate-bounce-in opacity-0" style="animation-delay: 0.8s;">
+<!-- Stars Earned -->
+<div class="bg-surface-bright rounded-xl p-4 flex items-center gap-3 shadow-[0_4px_0_0_rgba(255,220,188,1)] border-2 border-surface-variant">
+<div class="bg-primary-container rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">25</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant text-sm">Stars Earned</span>
+</div>
+</div>
+<!-- Sticker Unlocked -->
+<div class="bg-surface-bright rounded-xl p-4 flex items-center gap-3 shadow-[0_4px_0_0_rgba(255,220,188,1)] border-2 border-surface-variant">
+<div class="bg-tertiary-container rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-tertiary">New</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant text-sm">Sticker Unlocked!</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-gutter w-full max-w-lg mt-8 animate-bounce-in opacity-0" style="animation-delay: 1.1s;">
+<!-- Play Again (Primary) -->
+<button class="btn-3d flex-1 bg-primary text-on-primary rounded-xl p-6 flex items-center justify-center gap-4 shadow-[0_6px_0_0_#5e4200] border-2 border-primary-fixed-dim hover:bg-surface-tint pop-on-hover min-h-[min(touch-target-min)]">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">replay</span>
+<span class="text-headline-lg font-headline-lg">Play Again</span>
+</button>
+<!-- Next Level / Back to Map -->
+<button class="btn-3d flex-1 bg-secondary-container text-on-secondary-container rounded-xl p-6 flex items-center justify-center gap-4 shadow-[0_6px_0_0_#004b65] border-2 border-secondary-fixed hover:bg-secondary-fixed-dim pop-on-hover min-h-[min(touch-target-min)]">
+<span class="text-headline-lg font-headline-lg">Next Level</span>
+<span class="material-symbols-outlined text-4xl">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Map button explicitly to go back to the world view if needed, positioned out of the main flow -->
+<button class="btn-3d absolute top-margin-mobile left-margin-mobile bg-surface-bright text-primary rounded-full p-4 flex items-center justify-center shadow-[0_4px_0_0_rgba(255,220,188,1)] border-2 border-surface-variant hover:bg-surface-container-low min-w-[min(touch-target-min)] min-h-[min(touch-target-min)] z-50">
+<span class="material-symbols-outlined text-3xl">map</span>
+</button>
+<script>
+        // Simple script to trigger confetti/fireworks effects logic if needed for further interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Interactive elements can have sound or haptic feedback added here in a real app
+            const buttons = document.querySelectorAll('.btn-3d');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Logic to handle navigation or replay
+                    console.log('Button clicked:', btn.innerText);
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kids Learning Adventure</string>
+    <string name="title_activity_main">Kids Learning Adventure</string>
+    <string name="package_name">com.kidslearning.adventure</string>
+    <string name="custom_url_scheme">com.kidslearning.adventure</string>
+</resources>

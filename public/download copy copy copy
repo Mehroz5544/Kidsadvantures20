@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Balloon Pop - Magic Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#ffba20",
+                        "error": "#ba1a1a",
+                        "secondary": "#006688",
+                        "inverse-primary": "#ffba20",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#53df69",
+                        "secondary-container": "#00c1fd",
+                        "on-surface-variant": "#514532",
+                        "primary": "#7c5800",
+                        "on-background": "#2b1701",
+                        "outline": "#837560",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#fff1e7",
+                        "on-primary-fixed": "#271900",
+                        "on-tertiary-fixed": "#002106",
+                        "tertiary-fixed": "#73fe84",
+                        "on-tertiary-container": "#005f1e",
+                        "inverse-on-surface": "#ffeee0",
+                        "on-secondary-fixed-variant": "#004d67",
+                        "surface-dim": "#fbd3ac",
+                        "surface-container-high": "#ffe3ca",
+                        "background": "#fff8f4",
+                        "secondary-fixed-dim": "#75d1ff",
+                        "on-secondary-container": "#004b65",
+                        "surface-container": "#ffead9",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#ffdcbc",
+                        "surface-bright": "#fff8f4",
+                        "secondary-fixed": "#c2e8ff",
+                        "on-tertiary-fixed-variant": "#005319",
+                        "outline-variant": "#d5c4ab",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#55e16b",
+                        "inverse-surface": "#432b11",
+                        "on-secondary-fixed": "#001e2b",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#ffdcbc",
+                        "surface": "#fff8f4",
+                        "primary-fixed": "#ffdea8",
+                        "tertiary": "#006e24",
+                        "primary-container": "#ffb800",
+                        "on-primary-container": "#6b4c00",
+                        "on-surface": "#2b1701",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#7c5800"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "64px",
+                        "stack-gap": "16px",
+                        "margin-desktop": "60px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Quicksand"],
+                        "display-hero": ["Quicksand"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "body-btm": ["Quicksand"],
+                        "label-caps": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "body-btm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "label-caps": ["18px", { "lineHeight": "24px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .float-animation {
+            animation: float 8s linear infinite, sway 4s ease-in-out infinite alternate;
+        }
+        
+        .float-animation:nth-child(even) {
+            animation-duration: 9s, 5s;
+            animation-delay: -2s;
+        }
+        
+        .float-animation:nth-child(3n) {
+            animation-duration: 7s, 3s;
+            animation-delay: -1s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh); }
+            100% { transform: translateY(-30vh); }
+        }
+
+        @keyframes sway {
+            0% { margin-left: -20px; }
+            100% { margin-left: 20px; }
+        }
+
+        .pop-effect {
+            animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .talk-bounce {
+            animation: talkBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes talkBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.02); }
+        }
+
+        .pop-text-anim {
+            animation: popText 0.6s ease-out forwards;
+        }
+
+        @keyframes popText {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -100%) scale(1); opacity: 0; }
+        }
+
+        .confetti-anim {
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .sparkle-anim {
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-headline-lg min-h-screen overflow-hidden fixed w-full h-full touch-none select-none">
+<!-- Background Environment (Meadow & Sky) -->
+<div class="absolute inset-0 z-0" id="sky-background">
+<!-- Sky Gradient -->
+<div class="absolute inset-0 bg-gradient-to-b from-[#87CEEB] to-[#E0F6FF]"></div>
+<!-- Sparkle Particles will be injected here -->
+<!-- Clouds -->
+<div class="absolute top-[10%] left-[15%] w-32 h-16 bg-white rounded-full opacity-80 blur-[2px] pointer-events-none"></div>
+<div class="absolute top-[5%] right-[20%] w-40 h-20 bg-white rounded-full opacity-70 blur-[2px] pointer-events-none"></div>
+<!-- Sun -->
+<div class="absolute top-8 right-8 w-24 h-24 bg-[#FFD700] rounded-full blur-[4px] opacity-90 shadow-[0_0_40px_rgba(255,215,0,0.8)] pointer-events-none"></div>
+<!-- Hills/Meadow -->
+<div class="absolute bottom-0 w-full h-[30%] bg-gradient-to-t from-[#7CFC00] to-[#90EE90] rounded-t-[50%] scale-x-150 transform translate-y-4"></div>
+<div class="absolute bottom-0 w-full h-[20%] bg-[#32CD32] rounded-t-[50%] scale-x-[1.2] transform translate-y-2 opacity-80"></div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface-container border-b-4 border-surface-variant shadow-[0_4px_0_0_rgba(124,88,0,0.2)]">
+<button class="w-[48px] h-[48px] flex items-center justify-center rounded-full bg-surface-lowest text-primary hover:translate-y-0.5 active:translate-y-1 transition-transform border-b-4 border-primary/30 active:border-b-0">
+<span class="material-symbols-outlined font-bold text-[32px]">arrow_back</span>
+</button>
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary text-center font-bold">Magic Map</h1>
+<div class="flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-xl border-b-4 border-on-primary-container shadow-sm hover:translate-y-0.5 active:translate-y-1 transition-transform">
+<span class="text-headline-lg-mobile font-headline-lg-mobile" id="score-counter">125</span>
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</header>
+<!-- Game Canvas (Balloons) -->
+<main class="absolute inset-0 z-10 pt-[80px] pb-[100px] overflow-hidden" id="game-area">
+<!-- Balloons will be injected here via JS -->
+</main>
+<!-- Pop Text Container -->
+<div class="absolute inset-0 z-20 pointer-events-none overflow-hidden" id="pop-container"></div>
+<!-- Professor Paws Guidance (Bottom Left/Center) -->
+<div class="fixed bottom-margin-mobile left-margin-mobile md:left-margin-desktop z-40 flex items-end gap-4 pointer-events-none">
+<!-- Speech Bubble -->
+<div class="bg-surface-lowest p-6 rounded-[2rem] rounded-bl-none shadow-xl border-b-4 border-surface-variant relative bounce-in" style="animation-delay: 0.5s; opacity: 0;">
+<p class="text-headline-lg-mobile font-headline-lg-mobile text-primary font-bold">Pop the letter <span class="text-error text-display-hero">B</span>!</p>
+<!-- Tail -->
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-surface-lowest transform rotate-45 border-b-4 border-r-4 border-surface-variant"></div>
+</div>
+<!-- Professor Paws Avatar -->
+<div class="w-32 h-32 rounded-full border-4 border-tertiary-container shadow-xl overflow-hidden bg-tertiary-fixed-dim shrink-0 bounce-in talk-bounce" style="animation-delay: 0.2s;">
+<img class="w-full h-full object-cover" data-alt="A cute, 3D animated bunny character wearing glasses and a teacher's bowtie, smiling brightly. The art style is vibrant, soft, and suitable for a young children's educational game. High energy, colorful, well-lit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv87x-sewX-8L2oTh-Hao0_eRNBTlKLKH5bvPYa0_RUaAcB-sATvV37h65XEhUHvCQfFxkHT7VlAEEEBWO6cx0sndPriLhZ7XXVt1kW0XUT3COoCVDJOJxBZgNjqMbzwe_L9N-lrnZ8BsMgrGN8MQ7Xw_t_weGVhkcwVYwPhrQVHdzfn6TAhvvcFZ8YNssEL_uq4bNmBne929pGgtp9BpjjGVp6qyaFFiYSu-RJW6f74Vtiuupf6vy"/>
+</div>
+</div>
+<!-- Confetti Overlay (Hidden until win) -->
+<div class="absolute inset-0 z-[60] pointer-events-none overflow-hidden" id="confetti-container"></div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameArea = document.getElementById('game-area');
+            const scoreCounter = document.getElementById('score-counter');
+            const popContainer = document.getElementById('pop-container');
+            const confettiContainer = document.getElementById('confetti-container');
+            const skyBackground = document.getElementById('sky-background');
+            let score = 125;
+            
+            const balloonColors = [
+                { bg: '#FF4136', border: '#C0392B', text: '#FFF' }, // Red
+                { bg: '#3498DB', border: '#2980B9', text: '#FFF' }, // Blue
+                { bg: '#F1C40F', border: '#F39C12', text: '#333' }, // Yellow
+                { bg: '#2ECC71', border: '#27AE60', text: '#FFF' }  // Green
+            ];
+            
+            const letters = ['A', 'B', 'C', 'D', 'E', 'B', 'F', 'B']; // Skewed for 'B'
+
+            // Create background sparkles
+            for(let i=0; i<20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'absolute bg-white rounded-full sparkle-anim pointer-events-none';
+                sparkle.style.width = `${Math.random() * 4 + 2}px`;
+                sparkle.style.height = sparkle.style.width;
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 60}%`;
+                sparkle.style.animationDelay = `${Math.random() * 4}s`;
+                skyBackground.appendChild(sparkle);
+            }
+
+            function triggerConfetti() {
+                const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+                for(let i=0; i<30; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'absolute w-3 h-3 rounded-sm confetti-anim';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.top = '-5%';
+                    confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                    confettiContainer.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }
+            }
+
+            function showPopText(x, y) {
+                const popText = document.createElement('div');
+                popText.textContent = 'POP!';
+                popText.className = 'absolute font-display-hero text-headline-lg-mobile text-error font-bold pop-text-anim drop-shadow-md';
+                popText.style.left = `${x}px`;
+                popText.style.top = `${y}px`;
+                popContainer.appendChild(popText);
+                
+                setTimeout(() => popText.remove(), 600);
+            }
+            
+            function createBalloon() {
+                const balloon = document.createElement('div');
+                const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                const letter = letters[Math.floor(Math.random() * letters.length)];
+                
+                // Randomize position across width (keeping away from very edges)
+                const leftPos = 10 + Math.random() * 80;
+                
+                balloon.className = 'absolute float-animation flex flex-col items-center justify-center cursor-pointer touch-target-min w-24 h-[120px] rounded-full select-none';
+                balloon.style.left = `${leftPos}%`;
+                
+                // Balloon Body
+                const body = document.createElement('div');
+                body.className = 'w-full h-full rounded-[50%] flex items-center justify-center relative shadow-lg';
+                body.style.backgroundColor = color.bg;
+                body.style.borderBottom = `6px solid ${color.border}`;
+                
+                // Highlight/Reflection (Skeuomorphic touch)
+                const highlight = document.createElement('div');
+                highlight.className = 'absolute top-2 right-4 w-4 h-8 rounded-full bg-white opacity-40 transform rotate-12 pointer-events-none';
+                
+                // Letter
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'text-display-hero font-display-hero pointer-events-none';
+                letterSpan.style.color = color.text;
+                letterSpan.textContent = letter;
+                
+                // Balloon String
+                const string = document.createElement('div');
+                string.className = 'w-1 h-16 bg-surface-variant/50 -mt-2 pointer-events-none';
+                
+                body.appendChild(highlight);
+                body.appendChild(letterSpan);
+                balloon.appendChild(body);
+                balloon.appendChild(string);
+                
+                balloon.addEventListener('pointerdown', (e) => {
+                    e.preventDefault(); // Prevent double firing on touch
+                    if(balloon.classList.contains('pop-effect')) return;
+                    
+                    const rect = balloon.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    showPopText(centerX, centerY);
+
+                    if(letter === 'B') {
+                        // Success
+                        score += 5;
+                        scoreCounter.textContent = score;
+                        scoreCounter.classList.add('scale-125', 'text-tertiary-container');
+                        setTimeout(() => scoreCounter.classList.remove('scale-125', 'text-tertiary-container'), 300);
+                        
+                        triggerConfetti();
+                    }
+                    
+                    balloon.classList.add('pop-effect');
+                    setTimeout(() => balloon.remove(), 250);
+                });
+                
+                gameArea.appendChild(balloon);
+                
+                // Remove when off screen
+                setTimeout(() => {
+                    if(balloon.parentNode) balloon.remove();
+                }, 10000);
+            }
+
+            // Spawn loop
+            setInterval(createBalloon, 1500);
+            
+            // Initial spawn
+            for(let i=0; i<3; i++) {
+                setTimeout(createBalloon, i * 400);
+            }
+        });
+    </script>
+</body></html>
