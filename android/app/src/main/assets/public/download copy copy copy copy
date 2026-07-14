@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>World Map - Magic Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ffead9",
+                        "surface-container-high": "#ffe3ca",
+                        "inverse-primary": "#ffba20",
+                        "primary-fixed-dim": "#ffba20",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#514532",
+                        "on-tertiary-fixed": "#002106",
+                        "surface-container-low": "#fff1e7",
+                        "on-primary-fixed": "#271900",
+                        "on-background": "#2b1701",
+                        "on-secondary-fixed-variant": "#004d67",
+                        "outline": "#837560",
+                        "inverse-on-surface": "#ffeee0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f4",
+                        "error": "#ba1a1a",
+                        "tertiary": "#006e24",
+                        "surface": "#fff8f4",
+                        "on-tertiary-container": "#005f1e",
+                        "surface-variant": "#ffdcbc",
+                        "on-error": "#ffffff",
+                        "primary": "#7c5800",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "on-primary-container": "#6b4c00",
+                        "inverse-surface": "#432b11",
+                        "on-tertiary-fixed-variant": "#005319",
+                        "surface-tint": "#7c5800",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#004b65",
+                        "outline-variant": "#d5c4ab",
+                        "tertiary-fixed-dim": "#55e16b",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f4",
+                        "tertiary-fixed": "#73fe84",
+                        "surface-container-highest": "#ffdcbc",
+                        "tertiary-container": "#53df69",
+                        "on-surface": "#2b1701",
+                        "secondary": "#006688",
+                        "primary-container": "#ffb800",
+                        "surface-dim": "#fbd3ac",
+                        "secondary-fixed": "#c2e8ff",
+                        "secondary-fixed-dim": "#75d1ff",
+                        "secondary-container": "#00c1fd",
+                        "primary-fixed": "#ffdea8",
+                        "on-secondary-fixed": "#001e2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target-min": "64px",
+                        "gutter": "24px",
+                        "stack-gap": "16px",
+                        "margin-desktop": "60px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Quicksand"],
+                        "headline-lg-mobile": ["Quicksand"],
+                        "label-caps": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-btm": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+                        "label-caps": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-btm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bubbly-button {
+            border-bottom-width: 4px;
+            transition: all 0.1s ease;
+        }
+        .bubbly-button:active {
+            transform: translateY(4px);
+            border-bottom-width: 0px;
+            margin-bottom: 4px;
+        }
+        
+        /* Map Path Animation */
+        .dash-path {
+            stroke-dasharray: 20;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-btm min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden md:flex flex-col bg-surface-bright border-r-4 border-surface-variant shadow-xl h-full w-80 rounded-r-lg fixed inset-y-0 left-0 z-[60]">
+<div class="flex flex-col items-center justify-center p-gutter border-b border-surface-variant">
+<div class="w-32 h-32 rounded-full bg-primary-container border-4 border-surface-variant overflow-hidden mb-4 shadow-[0_4px_0_0_rgba(124,88,0,0.2)]">
+<img alt="Floating Animal Teacher" class="w-full h-full object-cover" data-alt="A 3D stylized friendly rabbit character wearing glasses and a bowtie, smiling warmly. Bright colors, soft lighting, feeling safe and educational. High quality rendering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkEcr11idRIcgwb_P6GmqJDOBSoX4zWCueqTNyB08ZtvOxrKxqgB0zqZ0_Yn8faJtrDM7JMZHaJvCbR7ryrMEva-LYFmCmSsIUI9zdgJeZfYq3tDcm5AbweWCTylu7rjWFAHObVmnxeSx_akeWnQicIQLUNMznQTyKcmCXCyxYs0srxiGUt-Xdg9uy8EFAyR-jBO-FuqDzjcJN1Q15qYkrF_6ESnWSxp0CoRQoPwMmC689Zvlb97o-"/>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-primary text-center">Professor Paws</h2>
+<p class="text-body-btm font-body-btm text-on-surface-variant text-center">Level 5 Explorer</p>
+<div class="mt-4 flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full border-2 border-primary-container shadow-sm">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-label-caps font-label-caps text-on-surface">1,240 Coins</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+<a class="flex items-center gap-4 bg-tertiary-container text-on-tertiary-container rounded-lg m-2 p-4 border-b-4 border-tertiary hover:bg-surface-container-high transition-colors active:translate-x-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="text-headline-lg font-headline-lg">World Map</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg active:translate-x-1" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="text-headline-lg font-headline-lg">My Stickers</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg active:translate-x-1" href="#">
+<span class="material-symbols-outlined">family_restroom</span>
+<span class="text-headline-lg font-headline-lg">Parent Zone</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg active:translate-x-1" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-headline-lg font-headline-lg">Help</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-h-screen relative md:ml-80 pb-[100px] md:pb-0 pt-[80px] md:pt-0">
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile py-4 bg-surface-container border-b-4 border-surface-variant shadow-[0_4px_0_0_rgba(124,88,0,0.2)]">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-high border-2 border-surface-variant text-primary hover:translate-y-0.5 transition-transform active:translate-y-1 active:border-b-0 bubbly-button">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-primary text-center flex-1 mx-4 truncate">Magic Map</h1>
+<div class="flex items-center gap-2 bg-surface-bright px-3 py-2 rounded-xl border-2 border-surface-variant shadow-sm text-label-caps font-label-caps text-on-surface">
+<span>125</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</header>
+<!-- The Map Area -->
+<div class="flex-1 relative overflow-hidden bg-surface-dim">
+<!-- Background Pattern -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#7c5800 2px, transparent 2px); background-size: 32px 32px;"></div>
+<!-- SVG Path connecting worlds -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="xMidYMid slice" viewbox="0 0 1000 1000">
+<path d="M 100 800 C 300 800, 200 500, 500 500 C 800 500, 700 200, 900 200" fill="none" stroke="#ffdcbc" stroke-linecap="round" stroke-width="40"></path>
+<path class="dash-path" d="M 100 800 C 300 800, 200 500, 500 500 C 800 500, 700 200, 900 200" fill="none" stroke="#ffba20" stroke-linecap="round" stroke-width="12"></path>
+</svg>
+<!-- Map Nodes -->
+<div class="relative w-full h-[800px] max-w-4xl mx-auto mt-gutter-desktop">
+<!-- Start / Professor Paws -->
+<div class="absolute bottom-[10%] left-[5%] flex flex-col items-center">
+<div class="w-32 h-32 floating">
+<img alt="Start" class="w-full h-full object-contain" data-alt="A small 3D rendering of a cute bunny standing on a grassy patch, waving cheerfully. Bright colors, soft lighting, engaging for children." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFlzQM3KP_Clu20s0Sxn7kch_Ssp5ZJ9Zzz9-pRx13SeLuVa7_OaBRJ7dnDff83R3j9Ik6XK_BaqK12kdpt7dC0lzYgdAGsiqlJkgWZ0UUK44CAjC0MQzKKmfNDWA5KNoimiTUjLdih8KglWrtLk__W2kwN2xQvGIcx7XpZ9eCqOVEkyNuHphledtuZ6mDAZ_xxRNaBr262mTlMwtFZ7reIaAF9eGIA9SDZfgacSBxMn3-Np-9__68"/>
+</div>
+<div class="bg-surface-bright px-4 py-2 rounded-full border-4 border-surface-variant text-label-caps font-label-caps shadow-lg mt-2 text-primary">Start Here!</div>
+</div>
+<!-- World 1: Alphabet Forest -->
+<button class="absolute bottom-[30%] left-[25%] flex flex-col items-center group hover:scale-110 transition-transform bubbly-button border-b-8 border-tertiary rounded-3xl bg-tertiary-container p-4 w-48 shadow-xl">
+<div class="w-24 h-24 mb-2 bg-surface-bright rounded-2xl border-4 border-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-tertiary" style="font-variation-settings: 'FILL' 1;">forest</span>
+</div>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-on-tertiary-container text-center leading-tight">Alphabet<br/>Forest</span>
+<!-- Floating Go Button (Active Level) -->
+<div class="absolute -top-4 -right-4 bg-primary-container text-on-primary-container w-16 h-16 rounded-full border-4 border-surface-bright flex items-center justify-center shadow-lg transform rotate-12 floating">
+<span class="text-label-caps font-label-caps font-black">GO!</span>
+</div>
+</button>
+<!-- World 2: Number Mountain -->
+<button class="absolute top-[40%] left-[45%] flex flex-col items-center group hover:scale-110 transition-transform bubbly-button border-b-8 border-secondary rounded-3xl bg-secondary-container p-4 w-48 shadow-xl opacity-70 grayscale-[30%]">
+<div class="w-24 h-24 mb-2 bg-surface-bright rounded-2xl border-4 border-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-secondary" style="font-variation-settings: 'FILL' 1;">landscape</span>
+</div>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-on-secondary-container text-center leading-tight">Number<br/>Mountain</span>
+<div class="absolute inset-0 bg-surface-variant/20 rounded-3xl flex items-center justify-center backdrop-blur-[2px]">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant bg-surface-bright p-2 rounded-full border-2 border-surface-variant shadow-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</button>
+<!-- World 3: Shape Island -->
+<button class="absolute top-[15%] right-[10%] flex flex-col items-center group hover:scale-110 transition-transform bubbly-button border-b-8 border-primary rounded-3xl bg-primary-container p-4 w-48 shadow-xl opacity-70 grayscale-[30%]">
+<div class="w-24 h-24 mb-2 bg-surface-bright rounded-2xl border-4 border-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-primary" style="font-variation-settings: 'FILL' 1;">category</span>
+</div>
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-on-primary-container text-center leading-tight">Shape<br/>Island</span>
+<div class="absolute inset-0 bg-surface-variant/20 rounded-3xl flex items-center justify-center backdrop-blur-[2px]">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant bg-surface-bright p-2 rounded-full border-2 border-surface-variant shadow-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface border-t-4 border-surface-variant rounded-t-lg shadow-[0_-4px_0_0_rgba(0,102,136,0.1)]">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-4 shadow-[0_4px_0_0_#6b4c00] hover:scale-110 transition-transform active:scale-95 min-w-[64px] min-h-[64px]" href="#">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-caps font-label-caps mt-1">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:scale-110 transition-transform active:scale-95 min-w-[64px] min-h-[64px]" href="#">
+<span class="material-symbols-outlined text-3xl">face</span>
+<span class="text-label-caps font-label-caps mt-1">Profile</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:scale-110 transition-transform active:scale-95 min-w-[64px] min-h-[64px]" href="#">
+<span class="material-symbols-outlined text-3xl">settings</span>
+<span class="text-label-caps font-label-caps mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

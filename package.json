@@ -13,6 +13,7 @@
     "cap:open": "cap open android"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^7.2.0",
     "@capacitor-community/speech-recognition": "^7.0.1",
     "@capacitor-community/text-to-speech": "^6.1.0",
     "@capacitor/android": "^7.6.7",
@@ -21,6 +22,7 @@
     "@capacitor/core": "^7.6.7",
     "@capacitor/preferences": "^7.0.4",
     "@supabase/supabase-js": "^2.57.4",
+    "capacitor-billing": "^8.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

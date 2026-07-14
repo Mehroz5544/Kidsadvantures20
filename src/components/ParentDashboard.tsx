@@ -1,15 +1,17 @@
 import { useState, useCallback } from 'react';
-import { ArrowLeft, Lock, Trash2, BarChart3, TrendingUp, Target, Calendar, Volume2, VolumeX, Music, Mic, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Lock, Trash2, BarChart3, TrendingUp, Target, Calendar, Volume2, VolumeX, Music, Mic, RefreshCw, Crown, Award, BookOpen, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { useSound } from '../context/SoundContext';
+import { useSubscription } from '../context/SubscriptionContext';
 
 interface ParentDashboardProps {
   onBack: () => void;
+  onNavigatePremium?: () => void;
 }
 
 const DEFAULT_PIN = '1234';
 
-export function ParentDashboard({ onBack }: ParentDashboardProps) {
+export function ParentDashboard({ onBack, onNavigatePremium }: ParentDashboardProps) {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
@@ -17,6 +19,7 @@ export function ParentDashboard({ onBack }: ParentDashboardProps) {
 
   const { state, resetProgress, setDifficulty } = useGame();
   const { soundEnabled, toggleSound, voiceEnabled, toggleVoice, musicEnabled, toggleMusic } = useSound();
+  const { isPremium, setShowSubscriptionScreen } = useSubscription();
 
   const handlePinSubmit = useCallback(() => {
     if (pin === DEFAULT_PIN || pin.length === 4) {
@@ -120,16 +123,24 @@ export function ParentDashboard({ onBack }: ParentDashboardProps) {
 
         <h1 className="text-2xl font-bold text-white drop-shadow">Parent Dashboard</h1>
 
-        <button
-          onClick={toggleSound}
-          className="p-3 rounded-2xl bg-white/80 backdrop-blur shadow-lg hover:scale-105 transition-transform"
-        >
-          {soundEnabled ? (
-            <Volume2 className="w-6 h-6 text-green-500" />
-          ) : (
-            <VolumeX className="w-6 h-6 text-gray-400" />
+        <div className="flex items-center gap-2">
+          {isPremium && (
+            <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-400 shadow-lg">
+              <Crown className="w-5 h-5 text-white" />
+              <span className="text-white font-bold text-sm">Premium</span>
+            </div>
           )}
-        </button>
+          <button
+            onClick={toggleSound}
+            className="p-3 rounded-2xl bg-white/80 backdrop-blur shadow-lg hover:scale-105 transition-transform"
+          >
+            {soundEnabled ? (
+              <Volume2 className="w-6 h-6 text-green-500" />
+            ) : (
+              <VolumeX className="w-6 h-6 text-gray-400" />
+            )}
+          </button>
+        </div>
       </header>
 
       {/* Overview Stats */}
@@ -292,6 +303,80 @@ export function ParentDashboard({ onBack }: ParentDashboardProps) {
             </button>
           </div>
         </div>
+      </section>
+
+      {/* Detailed Learning Reports (Premium) */}
+      <section className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-white drop-shadow">Detailed Learning Reports</h2>
+          {!isPremium && <Lock className="w-5 h-5 text-amber-400" />}
+        </div>
+        {isPremium ? (
+          <div className="kids-card bg-white p-6 rounded-2xl shadow-lg space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="p-4 rounded-2xl bg-blue-50">
+                <Clock className="w-8 h-8 text-blue-500 mb-2" />
+                <p className="text-2xl font-bold text-gray-700">{Math.floor(state.stats.timeSpent / 60)}m</p>
+                <p className="text-sm text-gray-500">Total Time</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-green-50">
+                <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
+                <p className="text-2xl font-bold text-gray-700">{state.stats.correctAnswers}</p>
+                <p className="text-sm text-gray-500">Correct Total</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-red-50">
+                <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                <p className="text-2xl font-bold text-gray-700">{state.stats.wrongAnswers}</p>
+                <p className="text-sm text-gray-500">Wrong Total</p>
+              </div>
+            </div>
+            <div className="pt-4 border-t">
+              <h3 className="font-bold text-gray-700 mb-3">Category Breakdown</h3>
+              {Object.entries(state.progress).map(([category, value]) => {
+                const total = state.stats.correctAnswers + state.stats.wrongAnswers;
+                const catPercent = total > 0 ? Math.round((value / Math.max(state.stats.lessonsCompleted, 1)) * 100) : 0;
+                return (
+                  <div key={category} className="mb-3">
+                    <div className="flex justify-between mb-1">
+                      <span className="font-medium text-gray-600 capitalize">{category}</span>
+                      <span className="text-gray-500">{value} lessons · {catPercent}%</span>
+                    </div>
+                    <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"
+                        style={{ width: `${Math.min(catPercent, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="pt-4 border-t">
+              <div className="flex items-center gap-2 mb-2">
+                <Award className="w-5 h-5 text-amber-500" />
+                <span className="font-bold text-gray-700">Achievement Summary</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">{state.stats.totalStars} Stars</span>
+                <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">{state.stats.totalCoins} Coins</span>
+                <span className="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium">{state.stats.streakDays} Day Streak</span>
+                <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">{state.stats.lessonsCompleted} Lessons</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="kids-card bg-white p-6 rounded-2xl shadow-lg text-center">
+            <Crown className="w-12 h-12 text-amber-400 mx-auto mb-3" />
+            <p className="text-gray-600 font-bold mb-2">Detailed Reports are a Premium Feature</p>
+            <p className="text-gray-500 text-sm mb-4">Unlock in-depth analytics, category breakdowns, and achievement tracking.</p>
+            <button
+              onClick={() => onNavigatePremium ? onNavigatePremium() : setShowSubscriptionScreen(true)}
+              className="px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 to-yellow-400 text-white font-bold shadow-lg hover:scale-105 transition-transform inline-flex items-center gap-2"
+            >
+              <Crown className="w-5 h-5" /> Unlock Premium
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Reset Confirmation Modal */}

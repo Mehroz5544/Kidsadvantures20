@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Parent Zone Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "surface-container": "#ffead9",
+                      "surface-container-high": "#ffe3ca",
+                      "inverse-primary": "#ffba20",
+                      "primary-fixed-dim": "#ffba20",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#514532",
+                      "on-tertiary-fixed": "#002106",
+                      "surface-container-low": "#fff1e7",
+                      "on-primary-fixed": "#271900",
+                      "on-background": "#2b1701",
+                      "on-secondary-fixed-variant": "#004d67",
+                      "outline": "#837560",
+                      "inverse-on-surface": "#ffeee0",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#fff8f4",
+                      "error": "#ba1a1a",
+                      "tertiary": "#006e24",
+                      "surface": "#fff8f4",
+                      "on-tertiary-container": "#005f1e",
+                      "surface-variant": "#ffdcbc",
+                      "on-error": "#ffffff",
+                      "primary": "#7c5800",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#5e4200",
+                      "on-primary-container": "#6b4c00",
+                      "inverse-surface": "#432b11",
+                      "on-tertiary-fixed-variant": "#005319",
+                      "surface-tint": "#7c5800",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#004b65",
+                      "outline-variant": "#d5c4ab",
+                      "tertiary-fixed-dim": "#55e16b",
+                      "on-secondary": "#ffffff",
+                      "background": "#fff8f4",
+                      "tertiary-fixed": "#73fe84",
+                      "surface-container-highest": "#ffdcbc",
+                      "tertiary-container": "#53df69",
+                      "on-surface": "#2b1701",
+                      "secondary": "#006688",
+                      "primary-container": "#ffb800",
+                      "surface-dim": "#fbd3ac",
+                      "secondary-fixed": "#c2e8ff",
+                      "secondary-fixed-dim": "#75d1ff",
+                      "secondary-container": "#00c1fd",
+                      "primary-fixed": "#ffdea8",
+                      "on-secondary-fixed": "#001e2b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "touch-target-min": "64px",
+                      "gutter": "24px",
+                      "stack-gap": "16px",
+                      "margin-desktop": "60px",
+                      "margin-mobile": "20px"
+              },
+              "fontFamily": {
+                      "display-hero": [
+                              "Quicksand"
+                      ],
+                      "headline-lg-mobile": [
+                              "Quicksand"
+                      ],
+                      "label-caps": [
+                              "Quicksand"
+                      ],
+                      "headline-lg": [
+                              "Quicksand"
+                      ],
+                      "body-btm": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "display-hero": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-btm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .bubbly-button {
+            border-bottom-width: 4px;
+            border-color: rgba(0,0,0,0.15);
+            transition: all 0.1s ease-out;
+        }
+        .bubbly-button:active {
+            transform: translateY(4px);
+            border-bottom-width: 0px;
+            margin-bottom: 4px;
+        }
+
+        .progress-bubble {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .progress-bubble.filled {
+            background-color: theme('colors.primary');
+        }
+        
+        /* Hide content until PIN is verified */
+        #dashboard-content { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen font-body-btm pb-24 md:pb-0 md:pl-80">
+<!-- PIN Lock Screen -->
+<div class="fixed inset-0 z-[100] bg-surface flex flex-col items-center justify-center p-6" id="pin-screen">
+<div class="max-w-md w-full bg-surface-container rounded-xl p-8 shadow-xl text-center">
+<span class="material-symbols-outlined text-6xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">lock</span>
+<h1 class="text-headline-lg font-headline-lg text-primary mb-2">Parent Zone</h1>
+<p class="text-on-surface-variant mb-8">Enter your PIN to view child progress.</p>
+<div class="flex justify-center gap-4 mb-8">
+<div class="w-4 h-4 rounded-full bg-surface-variant border-2 border-outline-variant pin-dot"></div>
+<div class="w-4 h-4 rounded-full bg-surface-variant border-2 border-outline-variant pin-dot"></div>
+<div class="w-4 h-4 rounded-full bg-surface-variant border-2 border-outline-variant pin-dot"></div>
+<div class="w-4 h-4 rounded-full bg-surface-variant border-2 border-outline-variant pin-dot"></div>
+</div>
+<div class="grid grid-cols-3 gap-4 max-w-[280px] mx-auto">
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(1)">1</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(2)">2</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(3)">3</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(4)">4</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(5)">5</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(6)">6</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(7)">7</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(8)">8</button>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(9)">9</button>
+<div class="h-16"></div>
+<button class="bubbly-button h-16 rounded-lg bg-surface-bright text-primary text-headline-lg font-headline-lg shadow-md" onclick="enterPin(0)">0</button>
+<button class="h-16 flex items-center justify-center text-on-surface-variant hover:text-error" onclick="clearPin()">
+<span class="material-symbols-outlined text-3xl">backspace</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Navigation Drawer (Desktop) -->
+<nav class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex flex-col h-full w-80 rounded-r-lg bg-surface-container-low border-r-4 border-surface-variant shadow-xl bg-surface-bright dark:bg-inverse-surface">
+<div class="p-6 border-b-4 border-surface-variant flex flex-col items-center">
+<img class="w-24 h-24 rounded-full border-4 border-primary mb-4 shadow-md" data-alt="A friendly, stylized 3D avatar of a dog character wearing professor glasses. Bright, bubbly aesthetic suitable for children." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQMP3Z_s_AwE1JR3VlDqiIV0a8EHbvC5ninLEA2eQ74vuaUM12xmst_lBsADZr8WFeEiV4MAy1T-ouIahzAPvSwFDyRTtEWbYl0uQgSwgzk1JcagRpDUd5428CWajMY5SSpiI8KKLmu2hmFwYgW3789Tk7E6TpDOCMdu86dDutnaGxXpSSKFw18vPShoE-w7pVALS_dcdlIu_FQiBeKPXhMptzyBTBdjHB8_yuqyihIBqPwDeYFfFP"/>
+<h2 class="text-headline-lg font-headline-lg text-primary text-primary dark:text-inverse-primary">Professor Paws</h2>
+<p class="text-body-btm font-body-btm text-on-surface-variant">Level 5 Explorer</p>
+<p class="text-label-caps font-label-caps text-secondary mt-1">1,240 Coins</p>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-caps font-label-caps">World Map</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="text-label-caps font-label-caps">My Stickers</span>
+</a>
+<a class="flex items-center gap-4 bg-tertiary-container text-on-tertiary-container rounded-lg m-2 p-4 border-b-4 border-tertiary hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">family_restroom</span>
+<span class="text-label-caps font-label-caps font-bold">Parent Zone</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 m-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-label-caps font-label-caps">Help</span>
+</a>
+</div>
+</nav>
+<!-- Top App Bar (Mobile) -->
+<header class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile py-4 docked full-width top-0 bg-surface-container dark:bg-surface-container-high border-b-4 border-surface-variant dark:border-outline-variant shadow-[0_4px_0_0_rgba(124,88,0,0.2)]">
+<button class="p-2 text-primary dark:text-inverse-primary hover:translate-y-0.5 transition-transform active:translate-y-1 active:border-b-0">
+<span class="material-symbols-outlined text-3xl">arrow_back</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-primary dark:text-inverse-primary">Parent Zone</h1>
+<div class="flex items-center gap-1 bg-surface-container-high px-3 py-1 rounded-full text-label-caps font-label-caps text-primary">
+<span>125</span>
+<span>⭐</span>
+</div>
+</header>
+<!-- Main Dashboard Content -->
+<main class="p-gutter mt-20 md:mt-0 max-w-7xl mx-auto" id="dashboard-content">
+<header class="mb-8 hidden md:block">
+<h1 class="text-display-hero font-display-hero text-primary">Leo's Progress</h1>
+<p class="text-body-btm font-body-btm text-on-surface-variant mt-2">Here's how your little explorer is doing today.</p>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Bento Grid: Progress Summary -->
+<div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+<!-- Time Spent Card -->
+<div class="bg-surface-container rounded-xl p-6 shadow-md border-b-4 border-surface-variant relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-20">
+<span class="material-symbols-outlined text-[120px] text-primary" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</div>
+<h3 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface mb-2 relative z-10">Time Spent</h3>
+<p class="text-display-hero font-display-hero text-primary relative z-10">45<span class="text-headline-lg font-headline-lg">m</span></p>
+<div class="w-full bg-surface-variant h-4 rounded-full mt-4 overflow-hidden relative z-10 border-2 border-outline-variant">
+<div class="bg-secondary h-full rounded-full w-3/4"></div>
+</div>
+<p class="text-sm font-label-caps text-on-surface-variant mt-2 text-right">Daily Goal: 60m</p>
+</div>
+<!-- Learning Progress -->
+<div class="bg-primary-container rounded-xl p-6 shadow-md border-b-4 border-primary relative">
+<h3 class="text-headline-lg-mobile font-headline-lg-mobile text-on-primary-container mb-4">Core Skills</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-on-primary-container font-label-caps mb-1">
+<span>ABC Learning</span>
+<span>80%</span>
+</div>
+<div class="flex gap-1">
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-on-primary-container font-label-caps mb-1">
+<span>Numbers</span>
+<span>60%</span>
+</div>
+<div class="flex gap-1">
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-primary rounded-full"></div>
+<div class="h-4 flex-1 bg-surface-variant rounded-full"></div>
+<div class="h-4 flex-1 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Focus Areas -->
+<div class="md:col-span-4 bg-error-container rounded-xl p-6 shadow-md border-b-4 border-error opacity-90">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">psychology_alt</span>
+<h3 class="text-headline-lg-mobile font-headline-lg-mobile text-on-error-container">Focus Areas</h3>
+</div>
+<p class="text-body-btm font-body-btm text-on-error-container text-sm mb-4">Leo needs a little extra help with these:</p>
+<div class="flex flex-wrap gap-3">
+<div class="w-14 h-14 bg-surface rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-error shadow-sm border-2 border-error">Q</div>
+<div class="w-14 h-14 bg-surface rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-error shadow-sm border-2 border-error">8</div>
+<div class="w-14 h-14 bg-surface rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-error shadow-sm border-2 border-error">Z</div>
+</div>
+<button class="mt-6 w-full bubbly-button bg-error text-on-error py-3 rounded-full font-label-caps shadow-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">play_lesson</span> Review Now
+                </button>
+</div>
+<!-- Settings -->
+<div class="md:col-span-12 bg-surface-bright rounded-xl p-6 shadow-md border-b-4 border-surface-variant mt-4">
+<h3 class="text-headline-lg-mobile font-headline-lg-mobile text-primary mb-6">Parental Controls</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+</div>
+<div>
+<h4 class="font-label-caps text-on-surface">Voice Guidance</h4>
+<p class="text-sm text-on-surface-variant">Read instructions aloud</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border-2 border-outline-variant"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-tertiary-container rounded-full flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
+</div>
+<div>
+<h4 class="font-label-caps text-on-surface">Dark Mode</h4>
+<p class="text-sm text-on-surface-variant">Softer on the eyes</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border-2 border-outline-variant"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 docked full-width bottom-0 rounded-t-lg bg-surface dark:bg-inverse-surface border-t-4 border-surface-variant dark:border-outline-variant shadow-[0_-4px_0_0_rgba(0,102,136,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:scale-110 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined text-3xl">home</span>
+<span class="text-label-caps font-label-caps text-xs mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:scale-110 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined text-3xl">face</span>
+<span class="text-label-caps font-label-caps text-xs mt-1">Stickers</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-4 shadow-[0_4px_0_0_#6b4c00] hover:scale-110 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-label-caps font-label-caps text-xs mt-1 font-bold">Parents</span>
+</a>
+</nav>
+<script>
+        let currentPin = '';
+        const targetPin = '1234'; // Dummy PIN for demo
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.remove('bg-surface-variant', 'border-outline-variant');
+                    dot.classList.add('bg-primary', 'border-primary');
+                } else {
+                    dot.classList.add('bg-surface-variant', 'border-outline-variant');
+                    dot.classList.remove('bg-primary', 'border-primary');
+                }
+            });
+        }
+
+        function enterPin(num) {
+            if (currentPin.length < 4) {
+                currentPin += num;
+                updateDots();
+                
+                if (currentPin.length === 4) {
+                    setTimeout(() => {
+                        if (currentPin === targetPin || true) { // Always pass for this UI demo
+                            document.getElementById('pin-screen').style.display = 'none';
+                            document.getElementById('dashboard-content').style.display = 'block';
+                        } else {
+                            // Shake animation could go here
+                            currentPin = '';
+                            updateDots();
+                        }
+                    }, 300);
+                }
+            }
+        }
+
+        function clearPin() {
+            currentPin = '';
+            updateDots();
+        }
+    </script>
+</body></html>

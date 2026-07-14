@@ -23,8 +23,20 @@ import { SpeakingGame } from './components/SpeakingGame';
 import { Confetti } from './components/Confetti';
 import { FeedbackOverlay } from './components/FeedbackOverlay';
 import { Character } from './components/Character';
+import { SubscriptionScreen } from './components/SubscriptionScreen';
+import { PremiumQuiz } from './components/PremiumQuiz';
+import { AdvancedMath } from './components/AdvancedMath';
+import { VocabularyLearning } from './components/VocabularyLearning';
+import { ScienceGK } from './components/ScienceGK';
+import { DailyChallenge } from './components/DailyChallenge';
+import { WeeklyChallenge } from './components/WeeklyChallenge';
+import { AchievementBadges } from './components/AchievementBadges';
+import { Certificates } from './components/Certificates';
 import { SoundProvider } from './context/SoundContext';
 import { GameProvider, useGame } from './context/GameContext';
+import { SubscriptionProvider, useSubscription } from './context/SubscriptionContext';
+import { premiumQuestions } from './data/premiumContent';
+import { initAdMob, showBannerAd, hideBannerAd, prepareInterstitialAd, showInterstitialAd } from './services/adService';
 
 export type Screen =
   | 'home'
@@ -50,10 +62,42 @@ export type Screen =
   | 'months'
   | 'days'
   | 'words'
-  | 'urdu';
+  | 'urdu'
+  | 'subscription'
+  | 'premium_quiz'
+  | 'advanced_math'
+  | 'vocabulary'
+  | 'science_gk'
+  | 'daily_challenge'
+  | 'weekly_challenge'
+  | 'achievement_badges'
+  | 'certificates';
+
+const PREMIUM_SCREENS: Screen[] = [
+  'premium_quiz',
+  'advanced_math',
+  'vocabulary',
+  'science_gk',
+  'daily_challenge',
+  'weekly_challenge',
+  'achievement_badges',
+  'certificates',
+];
 
 function AppContent() {
   const { showConfetti } = useGame();
+  const { isPremium, showSubscriptionScreen } = useSubscription();
+
+  useEffect(() => {
+    if (!isPremium) {
+      initAdMob().then(() => {
+        showBannerAd();
+        prepareInterstitialAd();
+      });
+    } else {
+      hideBannerAd();
+    }
+  }, [isPremium]);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -73,12 +117,20 @@ function AppContent() {
       <FeedbackOverlay />
 
       <Character />
+
+      {showSubscriptionScreen && (
+        <div className="fixed inset-0 z-[100] bg-gradient-to-b from-sky-300 via-sky-200 to-green-200 overflow-y-auto">
+          <SubscriptionScreen onBack={() => window.location.reload()} />
+        </div>
+      )}
     </div>
   );
 }
 
 function MainRouter() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+  const { isPremium, setShowSubscriptionScreen } = useSubscription();
+  const interstitialCounterRef = useState({ count: 0 })[0];
 
   useEffect(() => {
     const handleBack = (e: KeyboardEvent) => {
@@ -91,12 +143,20 @@ function MainRouter() {
   }, [currentScreen]);
 
   const goToScreen = useCallback((screen: Screen) => {
+    if (PREMIUM_SCREENS.includes(screen) && !isPremium) {
+      setShowSubscriptionScreen(true);
+      return;
+    }
     setCurrentScreen(screen);
-  }, []);
+  }, [isPremium, setShowSubscriptionScreen]);
 
   const goHome = useCallback(() => {
+    interstitialCounterRef.count++;
+    if (!isPremium && interstitialCounterRef.count % 3 === 0) {
+      showInterstitialAd();
+    }
     setCurrentScreen('home');
-  }, []);
+  }, [isPremium, interstitialCounterRef]);
 
   switch (currentScreen) {
     case 'home':
@@ -114,7 +174,7 @@ function MainRouter() {
     case 'rewards':
       return <RewardsScreen onBack={goHome} />;
     case 'parent':
-      return <ParentDashboard onBack={goHome} />;
+      return <ParentDashboard onBack={goHome} onNavigatePremium={() => setShowSubscriptionScreen(true)} />;
     case 'colors':
       return <ColorsLearning onBack={goHome} />;
     case 'shapes':
@@ -141,6 +201,24 @@ function MainRouter() {
       return <TracingGame onBack={goHome} />;
     case 'speaking':
       return <SpeakingGame onBack={goHome} />;
+    case 'subscription':
+      return <SubscriptionScreen onBack={goHome} />;
+    case 'premium_quiz':
+      return <PremiumQuiz title="Premium Quiz" questions={premiumQuestions} onBack={goHome} />;
+    case 'advanced_math':
+      return <AdvancedMath onBack={goHome} />;
+    case 'vocabulary':
+      return <VocabularyLearning onBack={goHome} />;
+    case 'science_gk':
+      return <ScienceGK onBack={goHome} />;
+    case 'daily_challenge':
+      return <DailyChallenge onBack={goHome} />;
+    case 'weekly_challenge':
+      return <WeeklyChallenge onBack={goHome} />;
+    case 'achievement_badges':
+      return <AchievementBadges onBack={goHome} />;
+    case 'certificates':
+      return <Certificates onBack={goHome} />;
     default:
       return <HomeScreen onNavigate={goToScreen} />;
   }
@@ -150,7 +228,9 @@ function App() {
   return (
     <SoundProvider>
       <GameProvider>
-        <AppContent />
+        <SubscriptionProvider>
+          <AppContent />
+        </SubscriptionProvider>
       </GameProvider>
     </SoundProvider>
   );

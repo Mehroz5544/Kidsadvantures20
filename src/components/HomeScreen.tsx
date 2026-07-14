@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { useSound } from '../context/SoundContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import type { Screen } from '../App';
 import {
   Type, Hash, Palette, Circle, PawPrint, Bird, Carrot, Apple, Car, User, Calendar, Dice1,
-  Gift, Trophy, Settings, Volume2, VolumeX, Star, Coins, Sparkles, Pencil, Mic, Music
+  Gift, Trophy, Settings, Volume2, VolumeX, Star, Coins, Sparkles, Pencil, Mic, Music,
+  Crown, Brain, BookOpen, Zap, Target, Award, Flame
 } from 'lucide-react';
 
 interface CategoryCardProps {
@@ -41,6 +43,17 @@ const miniGames: Omit<CategoryCardProps, 'progress'>[] = [
   { icon: <Dice1 className="w-12 h-12" />, title: 'Math', color: 'bg-gradient-to-br from-emerald-400 to-emerald-500', screen: 'math' },
 ];
 
+const premiumFeatures: Omit<CategoryCardProps, 'progress'>[] = [
+  { icon: <Brain className="w-12 h-12" />, title: 'Premium Quiz', color: 'bg-gradient-to-br from-amber-400 to-orange-500', screen: 'premium_quiz' },
+  { icon: <Zap className="w-12 h-12" />, title: 'Advanced Math', color: 'bg-gradient-to-br from-purple-400 to-purple-500', screen: 'advanced_math' },
+  { icon: <BookOpen className="w-12 h-12" />, title: 'Vocabulary', color: 'bg-gradient-to-br from-indigo-400 to-indigo-500', screen: 'vocabulary' },
+  { icon: <Sparkles className="w-12 h-12" />, title: 'Science & GK', color: 'bg-gradient-to-br from-teal-400 to-teal-500', screen: 'science_gk' },
+  { icon: <Target className="w-12 h-12" />, title: 'Daily Challenge', color: 'bg-gradient-to-br from-rose-400 to-rose-500', screen: 'daily_challenge' },
+  { icon: <Trophy className="w-12 h-12" />, title: 'Weekly Challenge', color: 'bg-gradient-to-br from-orange-400 to-orange-500', screen: 'weekly_challenge' },
+  { icon: <Award className="w-12 h-12" />, title: 'Badges', color: 'bg-gradient-to-br from-cyan-400 to-cyan-500', screen: 'achievement_badges' },
+  { icon: <Trophy className="w-12 h-12" />, title: 'Certificates', color: 'bg-gradient-to-br from-yellow-400 to-amber-500', screen: 'certificates' },
+];
+
 function CategoryCard({ icon, title, color, screen, progress = 0 }: CategoryCardProps & { onClick: () => void }) {
   const { playSound } = useSound();
   const handleClick = () => {
@@ -73,6 +86,7 @@ function CategoryCard({ icon, title, color, screen, progress = 0 }: CategoryCard
 export function HomeScreen({ onNavigate }: HomeScreenProps) {
   const { state } = useGame();
   const { soundEnabled, toggleSound, voiceEnabled, toggleVoice, musicEnabled, toggleMusic, speak } = useSound();
+  const { isPremium, setShowSubscriptionScreen } = useSubscription();
   const [showWelcome, setShowWelcome] = useState(false);
   const hasSpokenRef = useRef(false);
 
@@ -193,6 +207,44 @@ export function HomeScreen({ onNavigate }: HomeScreenProps) {
                 {game.icon}
               </div>
               <span className="font-bold text-lg drop-shadow">{game.title}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Premium Features Section */}
+      <section className="mb-8">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <Crown className="w-6 h-6 text-amber-400" />
+          <h2 className="text-xl font-bold text-white drop-shadow">
+            {isPremium ? 'Premium Features' : 'Unlock Premium!'}
+          </h2>
+          {!isPremium && (
+            <button
+              onClick={() => { setShowSubscriptionScreen(true); }}
+              className="ml-2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-400 text-white text-sm font-bold shadow-lg hover:scale-105 transition-transform"
+            >
+              Upgrade
+            </button>
+          )}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+          {premiumFeatures.map((feature) => (
+            <button
+              key={feature.screen}
+              onClick={() => onNavigate(feature.screen)}
+              className={`category-card ${feature.color} text-white shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl relative`}
+              style={{ borderRadius: '24px' }}
+            >
+              {!isPremium && (
+                <div className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <Crown className="w-4 h-4 text-amber-500" />
+                </div>
+              )}
+              <div className={`${feature.color} rounded-2xl p-3 mb-2 animate-bounce-slow`}>
+                {feature.icon}
+              </div>
+              <span className="font-bold text-lg drop-shadow">{feature.title}</span>
             </button>
           ))}
         </div>

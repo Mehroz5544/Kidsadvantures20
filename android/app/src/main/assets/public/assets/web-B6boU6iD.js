@@ -1,0 +1,1 @@
+import{W as e}from"./index-DK0cn6au.js";import"./index-CScjqHhW.js";class o extends e{constructor(){super()}async querySkuDetails(n){return{value:"web"}}async launchBillingFlow(n){return{value:"web"}}async sendAck(n){return{value:"web"}}async finishTransaction(n){return{value:"web"}}}export{o as BillingPluginWeb};
