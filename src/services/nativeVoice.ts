@@ -37,7 +37,7 @@ export async function speak(text: string, opts: VoiceOptions = {}): Promise<void
     await TextToSpeech.speak({
       text,
       lang: 'en-US',
-      rate: opts.rate ?? 0.85,
+      rate: opts.rate ?? 1.15,
       pitch: opts.pitch ?? 1.25,
       volume: 1.0,
       voice: femaleVoiceIndex ?? undefined,
@@ -49,7 +49,7 @@ export async function speak(text: string, opts: VoiceOptions = {}): Promise<void
       synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US';
-      u.rate = opts.rate ?? 0.85;
+      u.rate = opts.rate ?? 1.15;
       u.pitch = opts.pitch ?? 1.25;
       const voices = synth.getVoices();
       const fv =
@@ -135,6 +135,20 @@ let lastResult: ListenResult = { matches: [] };
 export async function stopListening(): Promise<void> {
   if (!isNative()) return;
   await SpeechRecognition.stop().catch(() => {});
+}
+
+export async function warmupTTS(): Promise<void> {
+  if (!isNative()) return;
+  try {
+    await TextToSpeech.speak({
+      text: ' ',
+      lang: 'en-US',
+      volume: 0,
+      queueStrategy: QueueStrategy.Flush,
+    });
+  } catch {
+    /* no-op */
+  }
 }
 
 export function isRunningNatively(): boolean {
