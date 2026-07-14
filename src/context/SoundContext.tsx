@@ -29,7 +29,6 @@ export function SoundProvider({ children }: { children: ReactNode }) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const musicTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastSpokenRef = useRef<string>('');
-  const speakQueueRef = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -114,27 +113,31 @@ export function SoundProvider({ children }: { children: ReactNode }) {
     }
   }, [soundEnabled, playTone, playNoiseBurst]);
 
-  const speak = useCallback((text: string) => {
-    if (!soundEnabled || !voiceEnabled) return;
+  const speak = useCallback(async (text: string) => {
+    if (!soundEnabled || !voiceEnabled || !text) return;
+
     if (lastSpokenRef.current === text) return;
     lastSpokenRef.current = text;
 
     setIsSpeaking(true);
-    speakQueueRef.current = speakQueueRef.current
-      .then(async () => {
-        await nativeSpeak(text, { rate: 0.85, pitch: 1.25 });
-      })
-      .catch(() => {})
-      .finally(() => {
-        setIsSpeaking(false);
-        setTimeout(() => {
-          lastSpokenRef.current = '';
-        }, 800);
+
+    try {
+      await stopSpeaking();
+      await nativeSpeak(text, {
+        rate: 1.15,
+        pitch: 1.25,
       });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSpeaking(false);
+      setTimeout(() => {
+        lastSpokenRef.current = '';
+      }, 200);
+    }
   }, [soundEnabled, voiceEnabled]);
 
   const stopSpeak = useCallback(() => {
-    speakQueueRef.current = Promise.resolve();
     setIsSpeaking(false);
     lastSpokenRef.current = '';
     void stopSpeaking();
