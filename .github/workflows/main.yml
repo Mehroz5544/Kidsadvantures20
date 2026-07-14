@@ -1,4 +1,4 @@
-name: Android APK Build
+name: Android Debug APK
 
 on:
   push:
@@ -6,31 +6,21 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        shell: bash
-
-    env:
-      CI: true
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 22
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      - name: Set up Java 21
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -40,67 +30,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Vite app
+      - name: Build web app
         run: npm run build
 
-      - name: Sync Capacitor Android
+      - name: Sync Capacitor
         run: npx cap sync android
 
       - name: Make Gradle executable
-        working-directory: android
-        run: chmod +x gradlew
+        run: chmod +x android/gradlew
 
       - name: Build Debug APK
         working-directory: android
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: KidsAdventure20-Debug-APK
-          path: android/app/build/outputs/apk/debug/*.apk
-
-      - name: Decode Release Keystore
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        working-directory: android
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
-
-      - name: Create signing properties
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        working-directory: android
-        run: |
-          cat <<EOF > keystore.properties
-          storeFile=release.keystore
-          storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
-          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-          EOF
-
-      - name: Build Release APK
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        working-directory: android
-        run: ./gradlew assembleRelease --stacktrace
-
-      - name: Upload Release APK
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: KidsAdventure20-Release-APK
-          path: android/app/build/outputs/apk/release/*.apk
-
-      - name: Upload Gradle Logs (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradle-logs
-          path: |
-            android/**/*.log
-            android/**/build/reports/**
-            android/**/build/outputs/logs/**
-
-      - name: Build Summary
-        if: success()
-        run: |
-          echo "✅ Android APK build completed successfully."
-          echo "Download the APK from the GitHub Actions Artifacts section."
+          name: app-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
