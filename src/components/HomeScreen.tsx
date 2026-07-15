@@ -34,6 +34,7 @@ const categories: Omit<CategoryCardProps, 'progress'>[] = [
   { icon: <User className="w-12 h-12" />, title: 'Body Parts', color: 'bg-gradient-to-br from-rose-400 to-rose-500', screen: 'bodyparts' },
   { icon: <Calendar className="w-12 h-12" />, title: 'Months', color: 'bg-gradient-to-br from-teal-400 to-teal-500', screen: 'months' },
   { icon: <Dice1 className="w-12 h-12" />, title: 'Days', color: 'bg-gradient-to-br from-lime-400 to-lime-500', screen: 'days' },
+  { icon: <Music className="w-12 h-12" />, title: 'Rhymes', color: 'bg-gradient-to-br from-yellow-400 to-orange-500', screen: 'rhymes' },
 ];
 
 const miniGames: Omit<CategoryCardProps, 'progress'>[] = [
