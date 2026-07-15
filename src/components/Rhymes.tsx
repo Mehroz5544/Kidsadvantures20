@@ -37,18 +37,34 @@ export function Rhymes({ onBack }: RhymesProps) {
   }, []);
 
   const handlePlayAudio = async () => {
-    playSound('click');
-    if (isPlaying) {
-      setIsPlaying(false);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-    } else {
-      setIsPlaying(true);
-      setIsSinging(false);
-    }
-  };
+  playSound('click');
 
+  if (isPlaying) {
+    setIsPlaying(false);
+    await stopSpeaking();
+    return;
+  }
+
+  setIsPlaying(true);
+  setIsSinging(false);
+
+  const lyrics =
+    language === 'en'
+      ? currentRhyme.lyrics
+      : currentRhyme.lyricsHi;
+
+  try {
+    await speak(lyrics.replace(/\n/g, ' '), {
+      lang: language === 'en' ? 'en-US' : 'hi-IN',
+      rate: 1.0,
+      pitch: 1.2,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
+  setIsPlaying(false);
+};
   const handleSinging = async () => {
     playSound('click');
     
