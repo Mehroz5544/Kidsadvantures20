@@ -56,8 +56,11 @@ export async function speak(text: string, opts: VoiceOptions = {}): Promise<void
       u.pitch = opts.pitch ?? 1.25;
       const voices = synth.getVoices();
       const fv =
-        voices.find(v => /female|zira|samantha|karen|tessa|moira|fiona|emma|allison/i.test(v.name) && /^en/i.test(v.lang)) ||
-        voices.find(v => /^en/i.test(v.lang));
+        voices.find(v =>
+          /female|zira|samantha|karen|tessa|moira|fiona|emma|allison/i.test(v.name) &&
+          /^(en|hi)/i.test(v.lang)
+        ) ||
+        voices.find(v => /^(en|hi)/i.test(v.lang));
       if (fv) u.voice = fv;
       synth.speak(u);
     } catch {
