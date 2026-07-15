@@ -5,6 +5,7 @@ import { Capacitor } from '@capacitor/core';
 export interface VoiceOptions {
   rate?: number;
   pitch?: number;
+  lang?: string;
 }
 
 const isNative = (): boolean => Capacitor.isNativePlatform();
@@ -36,7 +37,7 @@ export async function speak(text: string, opts: VoiceOptions = {}): Promise<void
     await pickFemaleVoice();
     await TextToSpeech.speak({
       text,
-      lang: 'en-US',
+      lang: opts.lang ?? 'en-US',
       rate: opts.rate ?? 1.15,
       pitch: opts.pitch ?? 1.25,
       volume: 1.0,
@@ -48,7 +49,7 @@ export async function speak(text: string, opts: VoiceOptions = {}): Promise<void
       const synth = window.speechSynthesis;
       synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
+      u.lang = opts.lang ?? 'en-US';
       u.rate = opts.rate ?? 1.15;
       u.pitch = opts.pitch ?? 1.25;
       const voices = synth.getVoices();
