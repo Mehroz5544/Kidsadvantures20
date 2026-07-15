@@ -20,6 +20,7 @@ import { DaysLearning } from './components/DaysLearning';
 import { MemoryGame } from './components/MemoryGame';
 import { TracingGame } from './components/TracingGame';
 import { SpeakingGame } from './components/SpeakingGame';
+import { Rhymes } from './components/Rhymes';
 import { Confetti } from './components/Confetti';
 import { FeedbackOverlay } from './components/FeedbackOverlay';
 import { Character } from './components/Character';
@@ -63,6 +64,7 @@ export type Screen =
   | 'days'
   | 'words'
   | 'urdu'
+  | 'rhymes'
   | 'subscription'
   | 'premium_quiz'
   | 'advanced_math'
@@ -201,6 +203,8 @@ function MainRouter() {
       return <TracingGame onBack={goHome} />;
     case 'speaking':
       return <SpeakingGame onBack={goHome} />;
+    case 'rhymes':
+      return <Rhymes onBack={goHome} />;
     case 'subscription':
       return <SubscriptionScreen onBack={goHome} />;
     case 'premium_quiz':
