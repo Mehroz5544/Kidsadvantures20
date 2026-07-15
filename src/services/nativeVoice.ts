@@ -18,11 +18,13 @@ async function pickFemaleVoice(): Promise<void> {
   voiceInitialized = true;
   try {
     const { voices } = await TextToSpeech.getSupportedVoices();
-    const englishVoices = voices.filter(v => /^en[-_]/i.test(v.lang));
+    const availableVoices = voices.filter(v => 
+      /^en[-_]/i.test(v.lang) || /^hi[-_]/i.test(v.lang)
+    );
     const female =
-      englishVoices.find(v => /female|zira|samantha|karen|tessa|moira|fiona|google uk english female|emma|allison/i.test(v.name)) ||
-      englishVoices.find(v => v.default) ||
-      englishVoices[0];
+      availableVoices.find(v => /female|zira|samantha|karen|tessa|moira|fiona|google uk english female|emma|allison/i.test(v.name)) ||
+      availableVoices.find(v => v.default) ||
+      availableVoices[0];
     if (female) {
       femaleVoiceIndex = voices.indexOf(female);
     }
